@@ -26,7 +26,7 @@ import {
 import OrderProduct from "../pages/OrderProduct";
 
 
-const OrdersTable = ({ resultsPerPage, filter }) => {
+const OrdersTable = ({ resultsPerPage, filter,filterStatus }) => {
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [filterone, setFilter] = useState([]);
@@ -105,6 +105,22 @@ const clearSelectedOrderItems = () => {
     }
   }, [page, resultsPerPage, filter, data]);
 
+  useEffect(() => {
+    filterOrders();
+  }, [data, filterStatus]);
+  
+  const filterOrders = () => {
+    if (filterStatus === 'all') {
+      setFilter(data);
+    } else {
+      const filtered = data.filter(order =>
+        order.order_items.some(item => item.delivery_status === filterStatus)
+      );
+      setFilter(filtered);
+    }
+  };
+
+  
   return (
     <div>
       {/* Table */}
@@ -114,7 +130,7 @@ const clearSelectedOrderItems = () => {
             <tr>
               <TableCell>Client</TableCell>
               <TableCell>Client emailID</TableCell>
-              <TableCell>Client address</TableCell>
+              <TableCell>order date</TableCell>
               <TableCell>Amount</TableCell>
               <TableCell>Payment status</TableCell>
               <TableCell>Date</TableCell>
@@ -135,7 +151,7 @@ const clearSelectedOrderItems = () => {
                   <span className="text-sm">{user.user_id?.email}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">{user.user_id?.addresses.full_address}</span>
+                  <span className="text-sm">{user.created_date}</span>
                 </TableCell>
                 <TableCell>
                   <span className="text-sm">{user.total_price}</span>

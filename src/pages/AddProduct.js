@@ -122,7 +122,7 @@ console.log(selectedCategories)
       }).catch(error => {
         console.error("Error adding product", error);
       });
-      history.push("/app/products");
+      history.push("/app/all-products");
        // Redirect to the products page after successful submission
     } catch (error) {
       console.error("Error adding product", error);

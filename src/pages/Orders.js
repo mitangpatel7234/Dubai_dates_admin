@@ -14,7 +14,7 @@ const Orders = () => {
   // pagination setup
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [filter, setFilter] = useState("all");
-  
+  const [filterStatus, setFilterStatus] = useState('all');
 
   const handleFilter = (filter_name) => {
     console.log(filter_name);
@@ -26,6 +26,22 @@ const Orders = () => {
     }
     if (filter_name == "success") {
       setFilter("success");
+    }
+    
+  };
+  const handleFilterStatus = (filter_name) => {
+    console.log(filter_name);
+    if (filter_name == "All") {
+      setFilterStatus("all");
+    }
+    if (filter_name == "Pending") {
+      setFilterStatus("Pending");
+    }
+    if (filter_name == "In Transit") {
+      setFilterStatus("In Transit");
+    }
+    if (filter_name == "Delivered") {
+      setFilterStatus("Delivered");
     }
     
   };
@@ -65,6 +81,22 @@ const Orders = () => {
                 
               </Select>
             </Label>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Filter Orders
+            </p>
+
+            <Label className="mx-3">
+              <Select
+                className="py-3"
+                onChange={(e) => handleFilterStatus(e.target.value)}
+              >
+                <option>All</option>
+                <option>Pending</option>
+                <option>In Transit</option>
+                <option>Delivered</option>
+                
+              </Select>
+            </Label>
 
             <Label className="">
               {/* <!-- focus-within sets the color for the icon when input is focused --> */}
@@ -85,7 +117,7 @@ const Orders = () => {
       </Card>
 
       {/* Table */}
-      <OrdersTable resultsPerPage={resultsPerPage} filter={filter} />
+      <OrdersTable resultsPerPage={resultsPerPage} filter={filter} filterStatus={filterStatus}/>
     </div>
   );
 };

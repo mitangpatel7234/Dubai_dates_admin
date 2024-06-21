@@ -28,6 +28,18 @@ const routes = [
         path: "/app/add-product",
         name: "Add Product",
       },
+      {
+        path: "/app/flavours",
+        name: "Add flavours",
+      },
+      {
+        path: "/app/goal",
+        name: "Add goal",
+      },
+      {
+        path: "/app/category",
+        name: "Add Category",
+      },
     ],
   },
   {
@@ -36,9 +48,29 @@ const routes = [
     name: "Customers",
   },
   {
-    path: "/app/chats",
+    path: "/app/hero",
     icon: "ChatIcon",
-    name: "Chats",
+    name: "Hero",
+  },
+  {
+    path: "/app/promo",
+    icon: "ChatIcon",
+    name: "Promo",
+  },
+  {
+    path: "/app/footer",
+    icon: "ChatIcon",
+    name: "Footer",
+  },
+  {
+    path: "/app/coupon",
+    icon: "ChatIcon",
+    name: "Coupon",
+  },
+  {
+    path: "/app/partner",
+    icon: "GroupIcon",
+    name: "Partner",
   },
   {
     path: "/app/manage-profile",

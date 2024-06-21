@@ -66,7 +66,25 @@ useEffect(() => {
 }, [resultsPerPage]);
 
 
-
+const handleDelete = (selectedDeleteProduct) => {
+  
+    axios.delete(`${server}/product/delete/${selectedDeleteProduct._id}`,{
+      headers: {
+      
+      Authorization: `${localStorage.getItem("authToken")}`,
+    }
+    ,})
+      .then((response) => {
+        console.log("Product deleted successfully", response.data);
+        // Optionally, you can redirect or update state after successful delete
+        closeModal();
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error deleting product", error);
+      });
+  
+};
 
 
   // pagination change control
@@ -88,12 +106,12 @@ useEffect(() => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState(null);
   async function openModal(productId) {
-    let product = await data.filter((product) => product.id === productId)[0];
+    let product = await data.filter((product) => product._id === productId)[0];
     // console.log(product);
     setSelectedDeleteProduct(product);
     setIsModalOpen(true);
   }
-
+console.log(selectedDeleteProduct)
   function closeModal() {
     setIsModalOpen(false);
   }
@@ -179,6 +197,7 @@ useEffect(() => {
       </Card>
 
       {/* Delete product model */}
+      
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <ModalHeader className="flex items-center">
           {/* <div className="flex items-center"> */}
@@ -201,8 +220,9 @@ useEffect(() => {
               Cancel
             </Button>
           </div>
+          
           <div className="hidden sm:block">
-            <Button>Delete</Button>
+            <Button onClick={() => handleDelete(selectedDeleteProduct)}>Delete</Button>
           </div>
           <div className="block w-full sm:hidden">
             <Button block size="large" layout="outline" onClick={closeModal}>
@@ -210,7 +230,7 @@ useEffect(() => {
             </Button>
           </div>
           <div className="block w-full sm:hidden">
-            <Button block size="large">
+            <Button block size="large" onClick={() => handleDelete(selectedDeleteProduct)}>
               Delete
             </Button>
           </div>
@@ -228,7 +248,7 @@ useEffect(() => {
                   <TableCell>Stock</TableCell>
                   <TableCell>MRP</TableCell>
                   <TableCell>QTY</TableCell>
-                  <TableCell>Price</TableCell>
+                  <TableCell>Sale Price</TableCell>
                   <TableCell>Action</TableCell>
                 </tr>
               </TableHeader>
@@ -267,12 +287,14 @@ useEffect(() => {
                             aria-label="Preview"
                           />
                         </Link>
+                        <Link to={`/app/product/update/${product._id}`}>
                         <Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                         />
+                        </Link>
                         <Button
                           icon={TrashIcon}
                           layout="outline"
@@ -308,9 +330,9 @@ useEffect(() => {
                     alt="product"
                   />
                   <CardBody>
-                    <div className="mb-3 flex items-center justify-between">
+                    <div className="mb-3 flex items-center justify-between flex-grow">
                       <p className="font-semibold truncate  text-gray-600 dark:text-gray-300">
-                        {product.name}
+                      {product.name.length > 20 ? product.name.slice(0, 20) + "..." : product.name}
                       </p>
                       <Badge
                         type={product.stock_levels > 0 ? "success" : "danger"}
@@ -326,8 +348,8 @@ useEffect(() => {
                       {product.sale_price}
                     </p>
 
-                    <p className="mb-8 text-gray-600 dark:text-gray-400">
-                      {product.product_description}
+                    <p className="mb-8 text-gray-600 dark:text-gray-400 flex-grow">
+                    {product.product_description.length > 40 ? product.product_description.slice(0, 40) + "..." : product.product_description}
                     </p>
 
                     <div className="flex items-center justify-between">
@@ -342,6 +364,7 @@ useEffect(() => {
                         </Link>
                       </div>
                       <div>
+                      <Link to={`/app/product/update/${product._id}`}>
                         <Button
                           icon={EditIcon}
                           className="mr-3"
@@ -349,11 +372,12 @@ useEffect(() => {
                           aria-label="Edit"
                           size="small"
                         />
+                        </Link>
                         <Button
                           icon={TrashIcon}
                           layout="outline"
                           aria-label="Delete"
-                          onClick={() => openModal(product.id)}
+                          onClick={() => openModal(product._id)}
                           size="small"
                         />
                       </div>
