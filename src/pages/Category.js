@@ -218,7 +218,7 @@ const handleUpdate = async (event) => {
                     className="py-3 pr-5 text-sm text-black dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input"
                     type="file"
                     onChange={(e) => setCategoryImage(e.target.files[0])}
-                    required
+                    
                   />
                 </Label>
                 <button type="submit" className="px-4 bg-white">

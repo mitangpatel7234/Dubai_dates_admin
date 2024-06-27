@@ -74,8 +74,8 @@ function Dashboard() {
         </ChartCard>
       </div>
 
-      <PageTitle>Orders</PageTitle>
-      <OrdersTable resultsPerPage={10} />
+      {/* <PageTitle>Orders</PageTitle> */}
+      {/* <OrdersTable resultsPerPage={10} /> */}
     </>
   );
 }

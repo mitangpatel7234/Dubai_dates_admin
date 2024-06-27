@@ -44,7 +44,7 @@ const [error, setError] = useState(null);
 const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedFlavours, setSelectedFlavours] = useState([]);
   const [selectedGoals, setSelectedGoals] = useState([]);
-
+  const [promo, setPromo] = useState(false);
   const [productImage, setProductImage] = useState(null);
   const [productSlideImage, setProductSlideImage] = useState(null);
   const [productPromoBannerImage, setProductPromoBannerImage] = useState(null);
@@ -97,6 +97,7 @@ console.log(selectedCategories)
     formData.append("product_overview", productOverview);
     formData.append("product_benefits", productBenefits);
     formData.append("product_ingredients", productIngredients);
+    formData.append("promo",  promo ? 'on' : 'off');
     
 
     if (productImage) formData.append("product_image", productImage);
@@ -119,10 +120,11 @@ console.log(selectedCategories)
         },
       }).then(response => {
         console.log(response.data);
+        history.push("/app/all-products");
       }).catch(error => {
         console.error("Error adding product", error);
       });
-      history.push("/app/all-products");
+      // history.push("/app/all-products");
        // Redirect to the products page after successful submission
     } catch (error) {
       console.error("Error adding product", error);
@@ -169,7 +171,7 @@ console.log(selectedCategories)
             
         });
   }, []);
-  console.log(typeof(selectedFlavours))
+  console.log(promo)
   return (
     <div>
       <PageTitle>Add New Product</PageTitle>
@@ -394,6 +396,16 @@ console.log(selectedCategories)
       </Label>
     ))}
             </Label>
+            <Label className="mb-2">
+            <FormTitle>Promo</FormTitle>
+            <Label>
+            <Input
+              type="checkbox"
+              checked={promo}
+              onChange={(e) => setPromo(e.target.checked)}
+            />
+          </Label>
+        </Label>
         <div className="w-full">
               <Button size="large"  type="submit" iconLeft={AddIcon}>
                 Add Product

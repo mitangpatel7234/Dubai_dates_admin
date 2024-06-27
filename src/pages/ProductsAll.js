@@ -54,10 +54,10 @@ const ProductsAll = () => {
 useEffect(() => {
   axios.get(`${server}/product/allproducts`) // Replace with your API endpoint
       .then((response) => {
-          setData(response.data);
+          setData(response.data.products);
           setLoading(false);
-          setTotalResults(response.data.length)
-          setFilter(response.data.slice(0, resultsPerPage));
+          setTotalResults(response.data.products.length)
+          setFilter(response.data.products.slice(0, resultsPerPage));
       })
       .catch((error) => {
           setError(error);

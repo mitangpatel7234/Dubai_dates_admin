@@ -38,7 +38,7 @@ const UpdateProduct = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedFlavours, setSelectedFlavours] = useState([]);
   const [selectedGoals, setSelectedGoals] = useState([]);
-
+  const [promo, setPromo] = useState(false);
   const [productImage, setProductImage] = useState(null);
   const [productSlideImage, setProductSlideImage] = useState(null);
   const [productPromoBannerImage, setProductPromoBannerImage] = useState(null);
@@ -62,6 +62,7 @@ const UpdateProduct = () => {
           setStockLevels(product.stock_levels);
           setProductDescription(product.product_description);
           setProductOverview(product.product_overview);
+          setPromo(product.promo);
           setProductBenefits(product.product_benefits);
           setProductIngredients(product.product_ingredients);
           setSelectedCategories(product.product_categories.map(cat => cat.id) || []);
@@ -122,6 +123,7 @@ const UpdateProduct = () => {
     formData.append("product_overview", productOverview);
     formData.append("product_benefits", productBenefits);
     formData.append("product_ingredients", productIngredients);
+    formData.append("promo",  promo ? 'on' : 'off');
 
     if (productImage) formData.append("product_image", productImage);
     if (productSlideImage) formData.append("product_slide_image", productSlideImage);
@@ -405,6 +407,16 @@ onChange={(e) => handleFileChange(e, setProductVideoImage)}
       </Label>
     ))}
             </Label>
+            <Label className="mb-2">
+            <FormTitle>Promo</FormTitle>
+            <Label>
+            <Input
+              type="checkbox"
+              checked={promo}
+              onChange={(e) => setPromo(e.target.checked)}
+            />
+          </Label>
+        </Label>
         <div className="w-full">
               <Button size="large"  type="submit" iconLeft={AddIcon}>
                 update Product
