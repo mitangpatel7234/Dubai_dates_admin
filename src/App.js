@@ -40,7 +40,7 @@ function App() {
   return (
     <>
       <Router>
-      <ToastContainer />
+      <ToastContainer position="bottom-right" autoClose={5} hideProgressBar />
         <AccessibleNavigationAnnouncer />
         <Switch>
         <Route path="/login">s
