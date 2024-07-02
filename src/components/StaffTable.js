@@ -37,7 +37,7 @@ const StaffTable = ({setComponent,isUpdated,setIsUpdated}) => {
     axios.get(`${server}/staff/staffs`, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem('jwt')}`,
+            Authorization: `${localStorage.getItem('authToken')}`,
           },
     })
       .then(response => {
@@ -67,7 +67,7 @@ const StaffTable = ({setComponent,isUpdated,setIsUpdated}) => {
         
         axios.delete(`${server}/staff/${deletedSelectedUser.id}`,{   headers: {
             "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem('jwt')}`,
+            Authorization: `${localStorage.getItem('authToken')}`,
           }}).then(res=>{
             if(res.status===200){
                 toast.success("User Deleted Successfully")
