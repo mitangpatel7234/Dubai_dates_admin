@@ -20,11 +20,13 @@ import {
 } from "@windmill/react-ui";
 import { Link,useHistory  } from "react-router-dom";
 import response from "../utils/demo/profileData";
+import { useHistory } from "react-router-dom";
 
 function Header() {
   const history = useHistory();
   const { mode, toggleMode } = useContext(WindmillContext);
   const { toggleSidebar } = useContext(SidebarContext);
+  const navigate = useHistory();
 
   const [isNotificationsMenuOpen, setIsNotificationsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
@@ -36,6 +38,7 @@ function Header() {
   function handleProfileClick() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
+
   const handleLogout = () => {
     // Remove authToken from localStorage
     localStorage.removeItem('authToken');
@@ -43,6 +46,7 @@ function Header() {
     // Redirect to login page or perform other logout related actions
     history.push('/login');
   };
+
   return (
     <header className="z-40 py-4 bg-white shadow-bottom dark:bg-gray-800">
       <div className="container flex items-center justify-between h-full px-6 mx-auto text-purple-600 dark:text-purple-300">
@@ -111,7 +115,7 @@ function Header() {
                 />
                 <span>Profile</span>
               </DropdownItem>
-              
+
               <DropdownItem onClick={handleLogout}>
                 <OutlineLogoutIcon
                   className="w-4 h-4 mr-3"
