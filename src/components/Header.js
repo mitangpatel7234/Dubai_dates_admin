@@ -38,6 +38,7 @@ function Header() {
     setIsProfileMenuOpen(!isProfileMenuOpen);
   }
   function handleLogout(){
+    console.log("logout")
     localStorage.clear()
     navigate.push('/login')
   }

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, lazy } from "react";
+import React, {useState,useEffect, lazy } from "react";
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,6 +10,7 @@ import axios from "axios";
 import Login from "./pages/Login"
 import ProtectedRoute from "./components/ProtectedRoutes";
 import { ToastContainer, toast } from 'react-toast'
+import { server } from "./server";
 const Layout = lazy(() => import("./containers/Layout"));
 
 const CreateAccount = lazy(() => import("./pages/CreateAccount"));
@@ -17,12 +18,12 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 
 function App() {
   const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
-
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (token) {
       setAuthToken(token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
     } else {
       setAuthToken(null);
       delete axios.defaults.headers.common['Authorization'];
@@ -36,7 +37,7 @@ function App() {
   };
 
 
-  
+  console.log(authToken)
   return (
     <>
       <Router>
@@ -50,7 +51,7 @@ function App() {
           <Route path="/forgot-password" component={ForgotPassword} />
 
           {/* Place new routes over this */}
-          <ProtectedRoute path="/app" component={Layout} authToken={authToken}/>
+         {authToken? <ProtectedRoute path="/app" component={Layout} authToken={authToken} />: <Login setAuthToken={handleSetAuthToken} />}
           {/* If you have an index page, you can remothis Redirect */}
           <Redirect from="/" to="/app" />
         </Switch>

@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
 import { Card, CardBody, Label, Select } from "@windmill/react-ui";
 import OrdersTable from "../components/OrdersTable";
-
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 function Icon({ icon, ...props }) {
   const Icon = icon;
   return <Icon {...props} />;
 }
 
 const Orders = () => {
+  const { userPermission } = useContext(UserPermissionContext);
   // pagination setup
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [filter, setFilter] = useState("all");
@@ -46,7 +47,7 @@ const Orders = () => {
     
   };
 
-  return (
+  return  (
     <div>
       <PageTitle>Orders</PageTitle>
 
