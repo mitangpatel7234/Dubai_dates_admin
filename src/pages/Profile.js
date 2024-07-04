@@ -38,7 +38,7 @@ const Profile = () => {
 <div className="flex items-center justify-start m-2">
       <PageTitle>Manage your Profile</PageTitle>
       <button onClick={handleAddUserClick}>
-        <div className="flex ml-5">
+        <div className="flex ml-5 text-gray-800 dark:text-gray-300">
         <div>
           {isUserManagement||isUpdated?"View Users":"Add User"}
         </div>

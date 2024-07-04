@@ -34,7 +34,7 @@ const UserManagement = ({staffEmail,staffPassword,staffPermissions,staffId,setCo
     axios.get(`${server}/staff/permissions`, {
         headers: {
             "Content-Type": "application/json",
-            Authorization: `${localStorage.getItem('jwt')}`,
+            Authorization: `${localStorage.getItem('authToken')}`,
           },
     })
       .then(response => {
@@ -110,7 +110,7 @@ const UserManagement = ({staffEmail,staffPassword,staffPermissions,staffId,setCo
               },{
                 headers: {
                   "Content-Type": "application/json",
-                  "Authorization": `${localStorage.getItem('jwt')}`
+                  "Authorization": `${localStorage.getItem('authToken')}`
                 }
               }).then(res=>{
                 if(res.status===200){
@@ -143,7 +143,7 @@ const UserManagement = ({staffEmail,staffPassword,staffPermissions,staffId,setCo
       }, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `${localStorage.getItem('jwt')}`
+          "Authorization": `${localStorage.getItem('authToken')}`
         }
       }).then(res=>{
         if(res.status===201){

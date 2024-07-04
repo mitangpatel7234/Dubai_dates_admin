@@ -43,7 +43,7 @@ function App() {
       <ToastContainer position="bottom-right" autoClose={5} hideProgressBar />
         <AccessibleNavigationAnnouncer />
         <Switch>
-        <Route path="/login">s
+        <Route path="/login">
         {authToken ? <Redirect to="/app" /> : <Login setAuthToken={handleSetAuthToken} />}
         </Route>
           <Route path="/create-account" component={CreateAccount} />
