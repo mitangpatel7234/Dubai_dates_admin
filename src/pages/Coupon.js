@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -6,6 +6,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import CouponTable from "../components/CouponTable";
 import axios from "axios";
 import { server } from "../server";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -25,8 +26,10 @@ const Coupon = () => {
     const [validDate, setValidDate] = useState('');
     const [minAmount, setMinAmount] = useState('');
     const [products, setProducts] = useState([]);
-  
+    const {userPermission} = useContext(UserPermissionContext)
     const handleSubmit = async (event) => {
+      if(!(userPermission==='ALL'||userPermission.includes('createCoupon'))) return;
+
       event.preventDefault();
       const formData = new FormData();
       formData.append('coupon_name', couponName);
@@ -238,9 +241,9 @@ const Coupon = () => {
                 />
               </Label>
               </div>
-                <button type="submit" className="px-4 bg-white mt-3">
+                {(userPermission==='ALL'||userPermission.includes('createCoupon')) && (<button type="submit" className="px-4 bg-white mt-3">
                   Add Coupon
-                </button>
+                </button>)}
               </form>
             </div>
           </CardBody>

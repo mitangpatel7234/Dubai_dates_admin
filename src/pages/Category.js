@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -6,6 +6,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import CategoryTable from "../components/CategoryTable";
 import axios from "axios";
 import { server } from "../server";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -21,7 +22,9 @@ const Category = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [page, setPage] = useState(1);
   const [categoryImage, setCategoryImage] = useState(null);
+  const {userPermission} = useContext(UserPermissionContext)
     const handleSubmit = async (event) => {
+      if(!(userPermission==='ALL'||userPermission.includes('createCategory')))return;
         event.preventDefault();
     const formData = new FormData();
     formData.append('name', categoryName);
@@ -105,6 +108,7 @@ const Category = () => {
 const handleUpdate = async (event) => {
     event.preventDefault();
     if (!selectedCategory) return;
+    if(!(userPermission==='ALL'||userPermission.includes('updateCategory'))) return;
 
     const formData = new FormData();
     formData.append('name', categoryName);
@@ -136,13 +140,13 @@ const handleUpdate = async (event) => {
         
       })
       .catch((error) => {
-        console.error("Error deleting product", error);
+        console.error("Error updating category", error);
       });
 
 
       // Optionally, update the list of flavours after updating
     } catch (error) {
-      console.error("Error updating flavor:", error);
+      console.error("Error updating category:", error);
     }
   };
 
@@ -173,9 +177,11 @@ const handleUpdate = async (event) => {
       <Card className="mt-5 mb-5 shadow-md">
         <CardBody>
           <div className="flex items-center gap-5">
+          {(userPermission==='ALL'||userPermission.includes('createCategory'))&&
+            (
           <p className="text-sm text-gray-600 dark:text-gray-400">
               Add Category
-            </p>
+            </p>)}
            
             <Label className="">
               {/* <!-- focus-within sets the color for the icon when input is focused --> */}

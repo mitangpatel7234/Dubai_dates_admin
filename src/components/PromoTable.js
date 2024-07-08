@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,14 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const PromoTable = ({ resultsPerPage,filterone,onSelectHero,totalResults,onPageChange }) => {
-  
+    const {userPermission}=useContext(UserPermissionContext)
     const handleDelete = async (promoId) => {
+      if(!(userPermission==='ALL'||userPermission.includes('deletePromoProduct'))) return;
+
         try {
           const response = await axios.delete(`${server}/promo/delete/${promoId}`, {
             headers: {
@@ -92,22 +95,24 @@ const PromoTable = ({ resultsPerPage,filterone,onSelectHero,totalResults,onPageC
                 <TableCell>
                       <div className="flex">
                         
-                        
-                        <Button
+      {(userPermission==='ALL'||userPermission.includes('updatePromoProduct'))
+                        &&
+                        (<Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                           onClick={() => onSelectHero(user)}
-                        />
-                       
-                        <Button
+                        />)}
+      {(userPermission==='ALL'||userPermission.includes('deletePromoProduct'))
+                       &&
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 

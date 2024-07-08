@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,14 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const HeroTable = ({ resultsPerPage,filterone,onSelectHero,totalResults,onPageChange }) => {
-  
+      const {userPermission}=useContext(UserPermissionContext)
     const handleDelete = async (heroId) => {
+      if(!(userPermission==='ALL'||userPermission.includes('deleteHero'))) return;
+
         try {
           const response = await axios.delete(`${server}/hero/delete/${heroId}`, {
             headers: {
@@ -77,22 +80,24 @@ const HeroTable = ({ resultsPerPage,filterone,onSelectHero,totalResults,onPageCh
                 <TableCell>
                       <div className="flex">
                         
+        {(userPermission==='ALL'||userPermission.includes('updateHero'))&&
                         
-                        <Button
+                        (<Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                           onClick={() => onSelectHero(user)}
-                        />
+                        />)}
+        {(userPermission==='ALL'||userPermission.includes('deleteHero'))&&
                        
-                        <Button
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 

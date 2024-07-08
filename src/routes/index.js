@@ -30,7 +30,7 @@ const routes = [
   {
     path: "/orders",
     component: Orders,
-    requiredPermission: "fetchAllOrder"
+    requiredPermission:['fetchAllOrder','updateOrder','createOrder']
   },
   {
     path: "/all-products",
@@ -39,22 +39,22 @@ const routes = [
   {
     path: "/add-product",
     component: AddProduct,
-    requiredPermission: "createProduct"
+    requiredPermission:['createProduct']
   },
   {
     path: "/flavours",
     component: Flavours,
-    requiredPermission: "createFlavour"
+    requiredPermission:['createFlavour','updateFlavour','deleteFlavour']
   },
   {
     path: "/category",
     component: Category,
-    requiredPermission: "createCategory"
+    requiredPermission:['fetchCategory','createCategory','deleteCategory','updateCategory']
   },
   {
     path: "/goal",
     component: Goal,
-    requiredPermission: "createGoal"
+    requiredPermission:[  'createGoal','updateGoal','deleteGoal']
   },
   {
     path: "/product/:id",
@@ -64,15 +64,18 @@ const routes = [
   {
     path: "/customers",
     component: Customers,
-    requiredPermission: "fetchAllUser"
+    requiredPermission: ["fetchAllUser"]
   },
   {
     path: "/hero",
-    component: Hero
+    component: Hero,
+    requiredPermission:['createHero','updateHero','deleteHero']
+
     },
   {
     path: "/promo",
-    component: Promo
+    component: Promo,
+    requiredPermission:['createPromoProduct','updatePromoProduct','deletePromoProduct']
     },
   {
     path: "/footer",
@@ -81,17 +84,17 @@ const routes = [
   {
     path: "/coupon",
     component: Coupon,
-    requiredPermission: "createCoupon"
+    requiredPermission:['fetchAllCoupon','applyCoupon','deleteCoupon','createCoupon']
   },
   {
     path: "/partner",
     component: Partner,
-    requiredPermission: "fetchPartner"
+    requiredPermission: ["fetchPartner"]
   },
   {
     path: "/manage-profile",
     component: Profile, 
-    requiredPermission: "updateProfile"
+    requiredPermission: ["updateProfile"]
   },
   {
     path: "/settings",

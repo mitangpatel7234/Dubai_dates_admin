@@ -12,7 +12,7 @@ if (loading){
     <Route
       {...rest}
       render={(props) =>
-      !requiredPermission||  userPermission==="ALL"||userPermission.includes(requiredPermission) ? (
+      !requiredPermission||  userPermission==="ALL"||userPermission.some(permission => requiredPermission.includes(permission)) ? (
           <Component {...props} />
         ) : (
           <Redirect to="/unauthorized" />

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -6,6 +6,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import HeroTable from "../components/HeroTable";
 import axios from "axios";
 import { server } from "../server";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -17,12 +18,13 @@ const Hero = () => {
   // pagination setup
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [heroName, setHeroName] = useState('');
- 
+  const {userPermission}=useContext(UserPermissionContext)
   const [selectedHero, setSelectedHero] = useState(null);
   const [page, setPage] = useState(1);
   const [heroImage, setHeroImage] = useState(null);
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if(!(userPermission==='ALL'||userPermission.includes('createHero'))) return;
     const formData = new FormData();
     formData.append('hero_name', heroName);
     
@@ -103,7 +105,9 @@ const Hero = () => {
 
 // Function to handle updating a flavor
 const handleUpdate = async (event) => {
-    event.preventDefault();
+  
+  event.preventDefault();
+  if(!(userPermission==='ALL'||userPermission.includes('updateHero'))) return;
     if (!selectedHero) return;
 
     const formData = new FormData();
@@ -173,9 +177,11 @@ const handleUpdate = async (event) => {
       <Card className="mt-5 mb-5 shadow-md">
         <CardBody>
           <div className="flex items-center gap-5">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+        {(userPermission==='ALL'||userPermission.includes('createHero')) &&
+
+          (<p className="text-sm text-gray-600 dark:text-gray-400">
               Add Hero
-            </p>
+            </p>)}
            
             <Label className="">
               {/* <!-- focus-within sets the color for the icon when input is focused --> */}

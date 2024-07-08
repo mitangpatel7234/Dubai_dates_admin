@@ -1,16 +1,18 @@
-import React from "react";
+import React,{useContext} from "react";
 import routes from "../../routes/sidebar";
 import { NavLink, Route } from "react-router-dom";
 import * as Icons from "../../icons";
 import SidebarSubmenu from "./SidebarSubmenu";
 import { Button } from "@windmill/react-ui";
-
+import { UserPermissionContext } from "../../context/UserPermissionsContext";
 function Icon({ icon, ...props }) {
   const Icon = Icons[icon];
   return <Icon {...props} />;
 }
 
 function SidebarContent() {
+  const { userPermission,loading } = useContext(UserPermissionContext);
+  
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
       <a
@@ -21,6 +23,7 @@ function SidebarContent() {
       </a>
       <ul className="mt-6">
         {routes.slice(0, -3).map((route) =>
+                (!route.requiredPermission||  userPermission==="ALL"|| userPermission.some(permission => route.requiredPermission.includes(permission)))&& (
           route.routes ? (
             <SidebarSubmenu route={route} key={route.name} />
           ) : (
@@ -46,11 +49,13 @@ function SidebarContent() {
               </NavLink>
             </li>
           )
-        )}
+        ))}
 
         <hr className="customeDivider mx-4 my-5" />
 
-        {routes.slice(-3).map((route) => (
+        {routes.slice(-3).map(
+          (route) => (
+        (!route.requiredPermission||  userPermission==="ALL"|| userPermission.some(permission => route.requiredPermission.includes(permission)))&& (
           <li className="relative px-6 py-3" key={route.name}>
             <NavLink
               exact
@@ -68,7 +73,7 @@ function SidebarContent() {
               <span className="ml-4">{route.name}</span>
             </NavLink>
           </li>
-        ))}
+        )))}
       </ul>
 
       <div className="px-6 my-6">

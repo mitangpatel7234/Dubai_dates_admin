@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -6,6 +6,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import FlavoursTable from "../components/FlavoursTable";
 import axios from "axios";
 import { server } from "../server";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -15,6 +16,7 @@ function Icon({ icon, ...props }) {
 
 const Flavours = () => {
   // pagination setup
+  const {userPermission}=useContext(UserPermissionContext)
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [flavorName, setFlavorName] = useState('');
   const [selectedFlavor, setSelectedFlavor] = useState(null);
@@ -94,6 +96,7 @@ const Flavours = () => {
 // Function to handle updating a flavor
 const handleUpdate = async (event) => {
     event.preventDefault();
+    if(!(userPermission==='ALL'||userPermission.includes('updateFlavour'))) return;
     if (!selectedFlavor) return;
 
     try {
