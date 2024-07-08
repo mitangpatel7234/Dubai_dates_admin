@@ -42,7 +42,12 @@ const CutomersTable = ({ resultsPerPage }) => {
  // Function to fetch orders data from API
  const fetchCustomers = async () => {
   try {
-    const response = await axios.get(`${server}/user/alluser`);
+    const response = await axios.get(`${server}/user/alluser`,{
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization":localStorage.getItem('authToken')
+      }
+    });
     setData(response.data); // Update data state with fetched orders
     setTotalResults(response.data.length); 
     setFilter(response.data.slice(0, resultsPerPage));// Update totalResults with total count of orders

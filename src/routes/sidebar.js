@@ -1,10 +1,4 @@
-/**
- * ⚠ These are used just to render the Sidebar!
- * You can include any link here, local or external.
- *
- * If you're looking to actual Router routes, go to
- * `routes/index.js`
- */
+
 const routes = [
   {
     path: "/app/dashboard", // the url
@@ -15,6 +9,7 @@ const routes = [
     path: "/app/orders",
     icon: "CartIcon",
     name: "Orders",
+    requiredPermission:['fetchAllOrder','updateOrder','createOrder']
   },
   {
     icon: "TruckIcon",
@@ -22,23 +17,27 @@ const routes = [
     routes: [
       {
         path: "/app/all-products",
-        name: "All Products",
+        name: "All Products"
       },
       {
         path: "/app/add-product",
         name: "Add Product",
+        requiredPermission:['createProduct']
       },
       {
         path: "/app/flavours",
-        name: "Add flavours",
+        name: "Add flavours", 
+        requiredPermission:['createFlavour','updateFlavour','deleteFlavour']
       },
       {
         path: "/app/goal",
         name: "Add goal",
+        requiredPermission:[  'createGoal','updateGoal','deleteGoal']
       },
       {
         path: "/app/category",
         name: "Add Category",
+        requiredPermission:['fetchCategory','createCategory','deleteCategory','updateCategory']
       },
     ],
   },
@@ -46,16 +45,19 @@ const routes = [
     path: "/app/customers",
     icon: "GroupIcon",
     name: "Customers",
+    requiredPermission:['fetchAllUser']
   },
   {
     path: "/app/hero",
     icon: "ChatIcon",
     name: "Hero",
+    requiredPermission :['createHero','updateHero','deleteHero']
   },
   {
     path: "/app/promo",
     icon: "ChatIcon",
     name: "Promo",
+    requiredPermission:['createPromoProduct','updatePromoProduct','deletePromoProduct']
   },
   {
     path: "/app/footer",
@@ -66,16 +68,19 @@ const routes = [
     path: "/app/coupon",
     icon: "ChatIcon",
     name: "Coupon",
+    requiredPermission:['fetchAllCoupon','applyCoupon ','deleteCoupon','createCoupon']
   },
   {
     path: "/app/partner",
     icon: "GroupIcon",
     name: "Partner",
+    requiredPermission:['fetchPartner']
   },
   {
     path: "/app/manage-profile",
     icon: "UserIcon",
     name: "Profile",
+    requiredPermission:['fetchStaff']
   },
   {
     path: "/app/settings",

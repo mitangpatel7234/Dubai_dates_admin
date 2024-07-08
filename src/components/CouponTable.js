@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,14 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const CouponTable = ({ resultsPerPage,filterone,totalResults,onPageChange }) => {
-  
+    const {userPermission}=useContext(UserPermissionContext)
     const handleDelete = async (couponId) => {
+      if(!(userPermission==='ALL'||userPermission.includes('deleteCoupon'))) return;
+
         try {
           const response = await axios.delete(`${server}/coupon/delete/${couponId}`, {
             headers: {
@@ -88,14 +91,14 @@ const CouponTable = ({ resultsPerPage,filterone,totalResults,onPageChange }) => 
                         
                         
                         
-                       
-                        <Button
+                      {(userPermission==='ALL'||userPermission.includes('deleteCoupon'))&&
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 

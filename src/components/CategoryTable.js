@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,14 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const CategoryTable = ({ resultsPerPage,filterone,onSelectGoal,totalResults,onPageChange }) => {
-  
+    const {userPermission} = useContext(UserPermissionContext)
     const handleDelete = async (categoryId) => {
+      if(!(userPermission==='ALL'||userPermission.includes('deleteCategory'))) return;
+
         try {
           const response = await axios.delete(`${server}/category/delete/${categoryId}`, {
             headers: {
@@ -80,22 +83,23 @@ const CategoryTable = ({ resultsPerPage,filterone,onSelectGoal,totalResults,onPa
                 <TableCell>
                       <div className="flex">
                         
+                      {(userPermission==='ALL'||userPermission.includes('updateCategory'))&&
                         
-                        <Button
+                        (<Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                           onClick={() => onSelectGoal(user)}
-                        />
-                       
-                        <Button
+                        />)}
+                      {(userPermission==='ALL'||userPermission.includes('deleteCategory'))&&
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 

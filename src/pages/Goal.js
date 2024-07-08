@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -6,6 +6,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import GoalTable from "../components/GoalTable";
 import axios from "axios";
 import { server } from "../server";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -15,12 +16,14 @@ function Icon({ icon, ...props }) {
 
 const Goal = () => {
   // pagination setup
+  const {userPermission} = useContext(UserPermissionContext)
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [goalName, setGoalName] = useState('');
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [page, setPage] = useState(1);
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if(! (userPermission==='ALL'||userPermission.includes('createGoal'))) return;
 
         try {
             // Send POST request to backend API
@@ -31,20 +34,20 @@ const Goal = () => {
                   },
             })
             .then((response) => {
-                console.log("Product deleted successfully", response.data);
+                console.log("Goal Created successfully", response.data);
                 // Optionally, you can redirect or update state after successful delete
                
                 window.location.reload();
                 setGoalName('');
               })
               .catch((error) => {
-                console.error("Error deleting product", error);
+                console.error("Error creating goal", error);
               });
 
             // Clear input field after successful submission
            
         } catch (error) {
-            console.error('Error adding flavor:', error.message);
+            console.error('Error creating goal:', error.message);
         }
     };
   
@@ -73,7 +76,6 @@ const Goal = () => {
       console.error('Error fetching orders:', error);
     }
   };
-  console.log(data)
   // Load data on component mount
   useEffect(() => {
     fetchGoals();
@@ -95,7 +97,7 @@ const Goal = () => {
 const handleUpdate = async (event) => {
     event.preventDefault();
     if (!selectedGoal) return;
-
+    if(!(userPermission==='ALL'||userPermission.includes('updateGoal'))) return;
     try {
       const response = await axios.put(
         `${server}/goal/update/${selectedGoal._id}`,
@@ -117,13 +119,13 @@ const handleUpdate = async (event) => {
         
       })
       .catch((error) => {
-        console.error("Error deleting product", error);
+        console.error("Error updating goal", error);
       });
 
 
       // Optionally, update the list of flavours after updating
     } catch (error) {
-      console.error("Error updating flavor:", error);
+      console.error("Error updating goal:", error);
     }
   };
 

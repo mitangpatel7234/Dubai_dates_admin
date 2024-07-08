@@ -1,29 +1,35 @@
-import React, { useContext, Suspense, useEffect, lazy } from 'react'
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom'
-import routes from '../routes'
+import React, { useContext, useEffect, lazy, Suspense } from 'react';
+import { Switch, Redirect, useLocation,Route } from 'react-router-dom';
+import routes from '../routes';
 
-import Sidebar from '../components/Sidebar'
-import Header from '../components/Header'
-import Main from '../containers/Main'
-import ThemedSuspense from '../components/ThemedSuspense'
-import { SidebarContext } from '../context/SidebarContext'
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
+import Main from '../containers/Main';
+import ThemedSuspense from '../components/ThemedSuspense';
+import { SidebarContext } from '../context/SidebarContext';
+import { UserPermissionContext } from '../context/UserPermissionsContext';
+import ProtectedRoute from '../components/ProtectedRoutes';
 
-const Page404 = lazy(() => import('../pages/404'))
+const Page404 = lazy(() => import('../pages/404'));
 
 function Layout() {
-  const { isSidebarOpen, closeSidebar } = useContext(SidebarContext)
-  let location = useLocation()
+  const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
+  const { userPermission, loading } = useContext(UserPermissionContext);
+  let location = useLocation();
 
   useEffect(() => {
-    closeSidebar()
-  }, [location])
+    closeSidebar();
+  }, [location, closeSidebar]);
+
+  if (loading) {
+    return <ThemedSuspense />;
+  }
 
   return (
     <div
       className={`flex h-screen bg-gray-50 dark:bg-gray-900 ${isSidebarOpen && 'overflow-hidden'}`}
     >
       <Sidebar />
-
       <div className="flex flex-col flex-1 w-full">
         <Header />
         <Main>
@@ -31,13 +37,14 @@ function Layout() {
             <Switch>
               {routes.map((route, i) => {
                 return route.component ? (
-                  <Route
+                  <ProtectedRoute
                     key={i}
                     exact={true}
                     path={`/app${route.path}`}
-                    render={(props) => <route.component {...props} />}
+                    component={route.component}
+                    requiredPermission={route.requiredPermission}
                   />
-                ) : null
+                ) : null;
               })}
               <Redirect exact from="/app" to="/app/dashboard" />
               <Route component={Page404} />
@@ -46,7 +53,7 @@ function Layout() {
         </Main>
       </div>
     </div>
-  )
+  );
 }
 
-export default Layout
+export default Layout;

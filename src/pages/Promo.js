@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect, useContext } from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import { NavLink } from "react-router-dom";
 import { HomeIcon } from "../icons";
@@ -7,6 +7,7 @@ import { Card, CardBody, Label, Select,Input } from "@windmill/react-ui";
 import axios from "axios";
 import { server } from "../server";
 import PromoTable from "../components/PromoTable";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 function Icon({ icon, ...props }) {
@@ -16,6 +17,7 @@ function Icon({ icon, ...props }) {
 
 const Promo = () => {
   // pagination setup
+  const {userPermission}=useContext(UserPermissionContext)
   const [resultsPerPage, setResultPerPage] = useState(10);
   const [promoName, setPromoName] = useState('');
   const [promoTitle, setPromoTitle] = useState('');
@@ -25,7 +27,8 @@ const Promo = () => {
   const [promoImage, setPromoImage] = useState(null);
   const [promoMobileImage, setPromoMobileImage] = useState(null);
     const handleSubmit = async (event) => {
-        event.preventDefault();
+      event.preventDefault();
+      if(!(userPermission==='ALL'||userPermission.includes('createPromoProduct'))) return;
     const formData = new FormData();
     formData.append('promo_title', promoName);
     formData.append('promo_subTitle', promoTitle);
@@ -114,6 +117,7 @@ const Promo = () => {
 const handleUpdate = async (event) => {
     event.preventDefault();
     if (!selectedPromo) return;
+    if(!(userPermission==='ALL'||userPermission.includes('updatePromoProduct'))) return;
 
     const formData = new FormData();
     formData.append('promo_title', promoName);
@@ -189,9 +193,11 @@ const handleUpdate = async (event) => {
       <Card className="mt-5 mb-5 shadow-md">
         <CardBody>
           <div className="flex items-center gap-5">
-          <p className="text-sm text-gray-600 dark:text-gray-400">
+      {(userPermission==='ALL'||userPermission.includes('createPromoProduct'))&&
+
+          (<p className="text-sm text-gray-600 dark:text-gray-400">
               Add Promo
-            </p>
+            </p>)}
            
             <Label className="">
               {/* <!-- focus-within sets the color for the icon when input is focused --> */}

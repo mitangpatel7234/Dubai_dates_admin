@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Link } from "react-router-dom";
 import { DropdownIcon } from "../../icons";
 import * as Icons from "../../icons";
 import { Transition } from "@windmill/react-ui";
-
+import {UserPermissionContext} from '../../context/UserPermissionsContext'
 function Icon({ icon, ...props }) {
   const Icon = Icons[icon];
   return <Icon {...props} />;
@@ -11,6 +11,7 @@ function Icon({ icon, ...props }) {
 
 function SidebarSubmenu({ route }) {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
+  const { userPermission,loading } = useContext(UserPermissionContext);
 
   function handleDropdownMenuClick() {
     setIsDropdownMenuOpen(!isDropdownMenuOpen);
@@ -42,7 +43,9 @@ function SidebarSubmenu({ route }) {
           className="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50 dark:text-gray-400 dark:bg-gray-900"
           aria-label="submenu"
         >
-          {route.routes.map((r) => (
+          {route.routes.map((r) => 
+                          (!r.requiredPermission||  userPermission==="ALL"|| userPermission.some(permission => r.requiredPermission.includes(permission)))&& (
+          
             <li
               className="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200"
               key={r.name}

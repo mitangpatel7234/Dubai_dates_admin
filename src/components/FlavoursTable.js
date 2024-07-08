@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,13 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const FlavoursTable = ({ resultsPerPage,filterone,onSelectFlavor,totalResults,onPageChange }) => {
-  
+    const {userPermission}=useContext(UserPermissionContext)
     const handleDelete = async (flavourId) => {
+      if( !(userPermission==='ALL'||userPermission.includes('deleteFlavour'))) return;
         try {
           const response = await axios.delete(`${server}/flavour/delete/${flavourId}`, {
             headers: {
@@ -74,22 +76,22 @@ const FlavoursTable = ({ resultsPerPage,filterone,onSelectFlavor,totalResults,on
                 <TableCell>
                       <div className="flex">
                         
-                        
-                        <Button
+                      { (userPermission==='ALL'||userPermission.includes('updateFlavour')) &&
+                        (<Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                           onClick={() => onSelectFlavor(user)}
-                        />
-                       
-                        <Button
+                        />)}
+                  { (userPermission==='ALL'||userPermission.includes('deleteFlavour')) &&
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 

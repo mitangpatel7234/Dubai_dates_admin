@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   TableBody,
   TableContainer,
@@ -24,11 +24,13 @@ import {
   TrashIcon,
 } from "../icons";
 import OrderProduct from "../pages/OrderProduct";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 
 
 const GoalTable = ({ resultsPerPage,filterone,onSelectGoal,totalResults,onPageChange }) => {
-  
+  const {userPermission}=useContext(UserPermissionContext)
     const handleDelete = async (goalId) => {
+      if(!(userPermission==='ALL'||userPermission.includes('deleteGoal'))) return;
         try {
           const response = await axios.delete(`${server}/goal/delete/${goalId}`, {
             headers: {
@@ -74,22 +76,23 @@ const GoalTable = ({ resultsPerPage,filterone,onSelectGoal,totalResults,onPageCh
                 <TableCell>
                       <div className="flex">
                         
-                        
-                        <Button
+                      {(userPermission==='ALL'||userPermission.includes('updateGoal'))
+                      &&
+                        (<Button
                           icon={EditIcon}
                           className="mr-3"
                           layout="outline"
                           aria-label="Edit"
                           onClick={() => onSelectGoal(user)}
-                        />
-                       
-                        <Button
+                        />)}
+                       {(userPermission==='ALL'||userPermission.includes('deleteGoal')) &&
+                        (<Button
                           icon={TrashIcon}
                           layout="outline"
                           
                           aria-label="Delete"
                           onClick={() => handleDelete(user._id)}
-                        />
+                        />)}
                       </div>
                     </TableCell>
                 
