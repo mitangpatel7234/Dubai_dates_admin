@@ -20,7 +20,7 @@ import {
 } from "@windmill/react-ui";
 import { Link,useHistory  } from "react-router-dom";
 import response from "../utils/demo/profileData";
-import { useHistory } from "react-router-dom";
+
 
 function Header() {
   const history = useHistory();

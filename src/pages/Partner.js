@@ -36,7 +36,10 @@ const Partner = () => {
    // Function to fetch orders data from API
    const fetchGoals = async () => {
     try {
-      const response = await axios.get(`${server}/partner/get-partners`);
+      const response = await axios.get(`${server}/partner/get-partners`, {
+        headers: {
+          Authorization: `${localStorage.getItem('authToken')}`,
+        }});
       setData(response.data); // Update data state with fetched orders
       setTotalResults(response.data.length); 
       setFilter(response.data.slice(0, resultsPerPage));

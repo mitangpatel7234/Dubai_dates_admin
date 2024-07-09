@@ -101,7 +101,7 @@ const Coupon = () => {
     useEffect(() => {
         axios.get(`${server}/product/allproducts`) // Replace with your API endpoint
             .then((response) => {
-                setProducts(response.data);
+                setProducts(response.data.products);
             })
             .catch((error) => {
                 console.error('Error fetching products:', error)
