@@ -1,34 +1,25 @@
 // src/components/ProtectedRoute.js
-import React from 'react';
+import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { UserPermissionContext } from '../context/UserPermissionsContext';
 
-const ProtectedRoute = ({ component: Component, authToken, ...rest }) => {
+const ProtectedRoute = ({ component: Component, requiredPermission, ...rest }) => {
+  const { userPermission,loading } = useContext(UserPermissionContext);
+if (loading){
+  return <div>Loading...</div>
+}
   return (
     <Route
       {...rest}
       render={(props) =>
-        authToken ? <Component {...props} /> : <Redirect to="/login" />
+      !requiredPermission||  userPermission==="ALL"||userPermission.some(permission => requiredPermission.includes(permission)) ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to="/unauthorized" />
+        )
       }
     />
   );
 };
 
 export default ProtectedRoute;
-
-
-// import React from "react"
-// import { Redirect } from "react-router-dom";
-
-// const ProtectedRoute = ({ component: Component, authToken }) => {
-  
-//   console.log(authToken)
-//     if (!authToken) {
-//       return <Redirect to="/login" replace/>;
-//     } else {
-//         return <Redirect to="/app" replace/>;
-//     }
-    
-  
-// };
-
-// export default ProtectedRoute;

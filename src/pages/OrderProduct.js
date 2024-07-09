@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useContext} from "react";
 import { NavLink, useParams } from "react-router-dom";
 import Icon from "../components/Icon";
 import PageTitle from "../components/Typography/PageTitle";
@@ -9,7 +9,9 @@ import { genRating } from "../utils/genarateRating";
 import { server } from "../server";
 import axios from "axios";
 import { toast } from "react-toast";
+import { UserPermissionContext } from "../context/UserPermissionsContext";
 const OrderProduct = ({ orderItems, onClose,order }) => {
+  const { userPermission } = useContext(UserPermissionContext);
     
   
     const [updatedOrderItems, setUpdatedOrderItems] = useState([...orderItems]);
@@ -24,8 +26,10 @@ const OrderProduct = ({ orderItems, onClose,order }) => {
   // Function to save updated delivery status
   const handleSaveDeliveryStatus = async () => {
     try {
-      const updatePromises = updatedOrderItems.map(async (item) => {
-        const response = await axios.put(
+      if(userPermission==='ALL'||userPermission.includes('updateOrder')){
+
+      let updatePromises = updatedOrderItems.map(async (item) => {
+        let response = await axios.put(
           `${server}/order/update/${item.order_id}`, // Use the order_id of each item
           {
             order_items: [{
@@ -43,7 +47,10 @@ const OrderProduct = ({ orderItems, onClose,order }) => {
       });
       const results = await Promise.all(updatePromises);
       console.log("Delivery statuses updated:", results);
-      toast.success("stauts updated sucessfully")
+      toast.success("status updated sucessfully")
+    }else{
+      toast.error("Not Have Permission to Edit!")
+    }
       // Optionally handle success (e.g., show a success message)
     } catch (error) {
       console.error("Error updating delivery statuses:", error);
@@ -55,7 +62,6 @@ const OrderProduct = ({ orderItems, onClose,order }) => {
     const [tabView, setTabView] = useState("reviews");
     const handleTabView = (viewName) => setTabView(viewName);
   
-   console.log(order)
   
     return (
       <div>
@@ -144,7 +150,7 @@ const OrderProduct = ({ orderItems, onClose,order }) => {
                   <option value="Delivered">Delivered</option>
                   {/* Add more delivery statuses as needed */}
                 </select>
-                <Button className="mt-5" onClick={handleSaveDeliveryStatus}>Save</Button>
+                {(userPermission==='ALL'||userPermission.includes('updateOrder')) &&(<Button className="mt-5" onClick={handleSaveDeliveryStatus}>Save</Button>)}
                 </div>
             
                 <h4 className="mt-4 text-purple-600 text-2xl font-semibold">

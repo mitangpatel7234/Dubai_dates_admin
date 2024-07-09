@@ -60,7 +60,6 @@ useEffect(() => {
   fetchOrders();
 }, []);
 
-console.log(data)
  // pagination change control
  function onPageChange(p) {
   setPage(p);
@@ -199,7 +198,7 @@ const clearSelectedOrderItems = () => {
       </TableContainer>
 {selectedOrder && (
   <div>
-      {selectedOrderItems && (
+      {selectedOrderItems && (  
         <OrderProduct orderItems={selectedOrderItems} order={selectedOrder} onClose={clearSelectedOrderItems} />
       )}
       </div>

@@ -42,6 +42,7 @@ const CutomersTable = ({ resultsPerPage }) => {
  // Function to fetch orders data from API
  const fetchCustomers = async () => {
   try {
+
     const response = await axios.get(`${server}/user/alluser`, {
       headers: {
         Authorization: `${localStorage.getItem('authToken')}`,

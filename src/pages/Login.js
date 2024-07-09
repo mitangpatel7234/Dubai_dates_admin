@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useContext} from 'react'
 import { Link,useHistory  } from 'react-router-dom'
 import axios from 'axios'
 import ImageLight from '../assets/img/login-office.jpeg'
@@ -7,11 +7,13 @@ import { GithubIcon, TwitterIcon } from '../icons'
 import { Label, Input, Button } from '@windmill/react-ui'
 import {server} from "../server"
 import {toast} from "react-toast"
+import { UserPermissionContext } from '../context/UserPermissionsContext';
 
 const Login= ({ setAuthToken }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
+  const { setUserPermission} = useContext(UserPermissionContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,6 +21,8 @@ const Login= ({ setAuthToken }) => {
       const response = await axios.post(`${server}/admin/login`, { email, password });
      
         const token = response.data.token;
+
+        setUserPermission(response.data.user.permissions)
         setAuthToken(token);
         localStorage.setItem('authToken', token);
         if (response.status === 200) {
