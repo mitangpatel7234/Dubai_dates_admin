@@ -12,6 +12,7 @@ const Profile = lazy(() => import("../pages/Profile"));
 const Settings = lazy(() => import("../pages/Settings"));
 const Page404 = lazy(() => import("../pages/404"));
 const Blank = lazy(() => import("../pages/Blank"));
+const UpdateProduct = lazy(() => import("../pages/UpdatePRoduct")); 
 const Flavours = lazy(() => import("../pages/Flavours"));
 const Goal = lazy(() => import("../pages/Goal"));
 const Category = lazy(() => import("../pages/Category"));
@@ -40,6 +41,11 @@ const routes = [
     path: "/add-product",
     component: AddProduct,
     requiredPermission:['createProduct']
+  },
+  {
+    path: "/product/update/:id",
+    component: UpdateProduct,
+    requiredPermission:['updateProduct']
   },
   {
     path: "/flavours",
